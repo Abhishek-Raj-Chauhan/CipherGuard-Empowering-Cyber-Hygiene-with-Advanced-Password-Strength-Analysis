@@ -1,6 +1,8 @@
 # CipherGuard Empowering Cyber Hygiene with Advanced Password Strength Analysis
  Real-time feedback and guidance on password strength using machine learning and deep learning algorithms.
 
+![Picture1](https://github.com/Abhishek-Raj-Chauhan/CipherGuard-Empowering-Cyber-Hygiene-with-Advanced-Password-Strength-Analysis/assets/100334669/8a3cc624-3ead-4a5a-bf06-a7219a6b42bb)
+
 # System Architecture							           
 The system architecture of our password strength evaluation web application encompasses several interconnected components, each fulfilling a specific role in the process of assessing and enforcing strong password selection. The architecture is designed to seamlessly integrate machine learning & deep learning algorithms, Python libraries, and entropy analyzers to provide real-time analysis of password strength.
 
@@ -17,3 +19,4 @@ The system architecture of our password strength evaluation web application enco
 •	Communication and Data Flow: Communication between the frontend and backend is facilitated through APIs or HTTP requests, ensuring seamless interaction and data exchange. User input, including passwords, is securely transmitted to the backend for analysis, while feedback on password strength is relayed back to the frontend for display to the user.
 
 •	Scalability and Performance: The architecture is designed to be scalable, allowing for the addition of new features, algorithms, and datasets as the application evolves. Emphasis is placed on optimizing performance to ensure real-time analysis and response, even under high user loads.
+
