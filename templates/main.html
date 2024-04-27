@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Password Strength Analysis</title>
+    <!-- Bootstrap -->
+    <link
+      href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      margin: 0; /* Remove default margin */
+      overflow-x: hidden; /* Prevent horizontal scrollbars */
+      position: relative; /* Needed for absolute positioning of canvas */
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1; /* Place canvas behind other content */
+      width: 100%; /* Cover entire viewport width */
+    }
+  </style>
+  <body>
+    <canvas></canvas>
+    <h3 class="text-center" style="padding: 15px">
+      PASSWORD STRENGTH ANALYSIS
+    </h3>
+
+    <div class="col-md-8" style="text-align: center; margin: 0 auto">
+      <form method="POST">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter Password"
+          name="password"
+          value="{{ request.form.password }}"
+          required
+        />
+        <div class="button-group" style="margin-top: 15px">
+          <button type="submit" name="submit" class="btn btn-primary">
+            Check
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-8" style="margin: 0 auto; margin-top: 25px">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Algorithm</th>
+            <th scope="col" style="color: red">Strength</th>
+            <th scope="col" style="color: red">Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Siamese Multi Head with Positional Encoding #1</td>
+            {% if (Transformer == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (Transformer == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (Transformer == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accutr}} %</td>
+          </tr>
+          <tr>
+            <td>BI LSTM</td>
+            {% if (CnnBilstm == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (CnnBilstm == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (CnnBilstm == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{acculs}} %</td>
+          </tr>
+          <tr>
+            <td>Neural Network</td>
+            {% if (NeuralNetwork == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (NeuralNetwork == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (NeuralNetwork == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accuNeu}} %</td>
+          </tr>
+          <tr>
+            <td>Ensembel Soft</td>
+            {% if (EnsembelSoft == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (EnsembelSoft == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (EnsembelSoft == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accues}} %</td>
+          </tr>
+          <tr>
+            <td>Ensembel Hard</td>
+            {% if (EnsembelHard == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (EnsembelHard == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (EnsembelHard == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accueh}} %</td>
+          </tr>
+          <tr>
+            <td>Random Forest</td>
+            {% if (RandomForest == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (RandomForest == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (RandomForest == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accuRF}} %</td>
+          </tr>
+          <tr>
+            <td>Logistic Regression</td>
+            {% if (LogReg == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (LogReg == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (LogReg == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accuLog}} %</td>
+          </tr>
+          <tr>
+            <td>Naive Bayes</td>
+            {% if (NaiveBayes == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (NaiveBayes == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (NaiveBayes == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>{{accuNav}} %</td>
+          </tr>
+
+          <tr>
+            <td>Decision Tree</td>
+            {% if (DecisionTree == 0) %}
+            <td>Weak</td>
+            {% endif %} {% if (DecisionTree == 1) %}
+            <td>Medium</td>
+            {% endif %} {% if (DecisionTree == 2) %}
+            <td>Strong</td>
+            {% endif %}
+            <td>79.97236434253277%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; justify-content: center">
+        <h1
+          style="
+            background-color: #000000bf;
+            font-size: xx-large;
+            padding: 0.5rem;
+          "
+        >
+          Time to Crack Password : {{tval}} {{tunit}}
+        </h1>
+    </div>
+    <div
+      id="histogramplot"
+      style="margin-top: 25px; display: flex; justify-content: center"
+    >
+      <!-- Display histogram image here -->
+      <img
+        src="data:image/png;base64, {{ histogram }}"
+        alt="Histogram"
+        style="max-width: 100%; height: auto"
+      />
+    </div>
+    <script>
+      // Initialising the canvas
+      var canvas = document.querySelector("canvas"),
+        ctx = canvas.getContext("2d");
+
+      // Setting up the letters
+      var letters =
+        "ABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZ";
+      letters = letters.split("");
+
+      // Setting up the columns
+      var fontSize = 10,
+        columns = Math.ceil(window.innerWidth / fontSize); // Adjust for the width of the canvas
+
+      // Setting up the drops
+      var drops = [];
+      for (var i = 0; i < columns; i++) {
+        drops[i] = 1;
+      }
+
+      // Function to resize canvas height to fit content height
+      function resizeCanvas() {
+        var contentHeight = document.body.scrollHeight;
+        canvas.height = contentHeight;
+      }
+
+      // Setting the width and initial height of the canvas
+      canvas.width = window.innerWidth;
+      resizeCanvas(); // Resize canvas to fit initial content height
+
+      // Setting up the draw function
+      function draw() {
+        ctx.fillStyle = "rgba(0, 0, 0, .1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < drops.length; i++) {
+          var text = letters[Math.floor(Math.random() * letters.length)];
+          ctx.fillStyle = "#0f0";
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          drops[i]++;
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+            drops[i] = 0;
+          }
+        }
+      }
+
+      // Loop the animation
+      setInterval(draw, 33);
+
+      // Event listener for window resize
+      window.addEventListener("resize", function () {
+        canvas.width = window.innerWidth;
+        resizeCanvas();
+      });
+    </script>
+  </body>
+</html>
